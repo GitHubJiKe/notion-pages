@@ -4,7 +4,6 @@ const { exec } = require('child_process');
 
 
 
-// 1. 为所有非index.html的html文件（从notion导出的文章文件）添加样式扩展，用来支持移动端的字体正常展示
 
 const MOBILE_FONT_SIZE_STYLE = `
 <meta name="viewport" content="user-scalable=no">
@@ -16,6 +15,7 @@ const MOBILE_FONT_SIZE_STYLE = `
 `
 const titles = [];
 
+// 1. 为所有非index.html的html文件（从notion导出的文章文件）添加样式扩展，用来支持移动端的字体正常展示
 function handleAllHTMLMobileStyle() {
     const directoryPath = './docs'; // 替换为你的文件夹路径
 
@@ -69,7 +69,6 @@ function handleAllHTMLMobileStyle() {
 }
 
 // 2. 扩展index.html的内容，将所有的其他html文件，扩展成链接的形式插入到index.html文件内
-
 function handleIndexHTML() {
     const indexPath = './docs/index.html'; // 替换为你的index.html文件的路径
 
@@ -154,5 +153,6 @@ function unzipFiles() {
 }
 
 // 4. 执行逻辑
-
 unzipFiles()
+
+// TODO: 重命名所有的非index.html文件为文章的title(标题)
