@@ -11,7 +11,7 @@ const MOBILE_FONT_SIZE_STYLE = `
 <script src="device.js"></script>
 `;
 const titles = [];
-
+const unrenamedTitles = [];
 // 1. 为所有非index.html的html文件（从notion导出的文章文件）添加样式扩展，用来支持移动端的字体正常展示
 function handleAllHTMLMobileStyle() {
     const directoryPath = "./docs"; // 替换为你的文件夹路径
@@ -152,7 +152,11 @@ function unzipFiles() {
                         if (successCount === zipFiles.length) {
                             renameHTMLFiles(handleAllHTMLMobileStyle);
                         }
-                        console.log(`Unzipped file ${zipFile} successfully.`);
+                        const n = stdout
+                            .split(".zip")[1]
+                            .replace("inflating: ./docs/", "")
+                            .trim();
+                        unrenamedTitles.push(n);
                     }
                 });
             });
@@ -172,9 +176,14 @@ function renameHTMLFiles(cb) {
             console.error("Error reading directory:", err);
             return;
         }
-        const filteredFiles = files.filter(
-            (file) => path.basename(file, ".html") !== "index"
-        );
+        const filteredFiles = files.filter((file) => {
+            const bName = path.basename(file);
+            return (
+                bName !== "index.html" &&
+                unrenamedTitles.includes(bName) &&
+                path.extname(file).toLowerCase() === ".html"
+            );
+        });
         let successCount = 0;
         filteredFiles.forEach((file) => {
             const filePath = path.join(folderPath, file);
