@@ -1,5 +1,9 @@
 const fs = require("fs")
 const path = require("path")
+const { exec } = require('child_process');
+
+
+
 // 1. 为所有非index.html的html文件（从notion导出的文章文件）添加样式扩展，用来支持移动端的字体正常展示
 
 const MOBILE_FONT_SIZE_STYLE = `<style>html{font-size:120%;}</style>`
@@ -101,6 +105,47 @@ function handleIndexHTML() {
     });
 }
 
-// 3. 执行逻辑
+// 3. 解压缩所有的文件
+function unzipFiles() {
 
-handleAllHTMLMobileStyle()
+    // 定义要解压缩的 ZIP 文件所在的目录
+    const zipFilesFolder = './docs';
+
+    // 定义解压缩后文件的存放目录
+    const destinationFolder = './docs';
+
+    // 读取 ZIP 文件所在的目录
+    fs.readdir(zipFilesFolder, (err, files) => {
+        if (err) {
+            console.error('Error reading directory', err);
+            return;
+        }
+
+        // 过滤出所有的 ZIP 文件
+        const zipFiles = files.filter(file => path.extname(file) === '.zip');
+        let successCount = 0;
+        // 遍历并解压每个 ZIP 文件
+        zipFiles.forEach(zipFile => {
+            const zipFilePath = path.join(zipFilesFolder, zipFile);
+            const command = `unzip -o "${zipFilePath}" -d "${destinationFolder}"`;
+
+            // 执行 unzip 命令
+            exec(command, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Error unzipping file ${zipFile}:`, error);
+                } else {
+                    successCount++;
+                    if (successCount === zipFiles.length) {
+                        handleAllHTMLMobileStyle()
+                    }
+                    console.log(`Unzipped file ${zipFile} successfully.`);
+                }
+            });
+        });
+    });
+
+}
+
+// 4. 执行逻辑
+
+unzipFiles()
