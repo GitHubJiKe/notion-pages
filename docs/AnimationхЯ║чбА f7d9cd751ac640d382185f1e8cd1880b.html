@@ -1,0 +1,706 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Animation基础</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="f7d9cd75-1ac6-40d3-8218-5f1e8cd1880b" class="page sans"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/webb2.jpg" style="object-position:center 70%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">🤿</span></div><h1 class="page-title">Animation基础</h1><p class="page-description"></p></header><div class="page-body"><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="56d68e9d-628d-4400-910d-0dab9c5eab87"><div style="font-size:1.5em"><span class="icon">✏️</span></div><div style="width:100%">CSS动画基础包括理解关键帧和动画属性的概念，如何使用关键帧创建动画，以及如何应用和配置动画属性。动画属性包括动画名称、持续时间、速度曲线、延迟、循环次数、方向、状态保持和播放状态。此外，还介绍了如何使用<code>animation-timing-function</code>属性自定义动画速度曲线，如何使用<code>animation-iteration-count</code>控制动画的重复次数，如何使用<code>animation-direction</code>改变动画播放的方向，如何使用<code>animation-fill-mode</code>控制动画在执行前后的样式，以及如何使用<code>animation-play-state</code>控制动画的播放状态。</div></figure><hr id="e4697dd8-28bf-4476-a4e8-56f8e0025d29"/><p id="a82e34c8-898f-439d-9611-43294ed2ef00" class="">可以通过下面这个网站定制很多不错的动画效果。</p><figure id="a446ba2d-83c2-4bcf-969c-01c44e7692ec"><a href="https://animista.net/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Animista - On-Demand CSS Animations Library</div><div class="bookmark-description">Animista is a CSS animation library and a place where you can play with a collection of ready-made CSS animations and download only those you will use.</div></div><div class="bookmark-href"><img src="https://animista.net/images/favicons/apple-touch-icon-1024x1024.png" class="icon bookmark-icon"/>https://animista.net/</div></div><img src="https://animista.net/animista-media-img.gif" class="bookmark-image"/></a></figure><hr id="eafc9323-5ac7-4df7-8e10-d5594de38ed7"/><h2 id="ceb66a53-9fa0-4856-b286-e9296c26f8c5" class="">理解CSS动画基础</h2><p id="16a3b1f3-0ca9-4236-8dbe-08bfece96659" class="">为了更好的掌握CSS动画（animations），首先需要理解以下基本概念：</p><ul id="2864c616-a74c-4fc4-8a61-984939b1ae55" class="bulleted-list"><li style="list-style-type:disc">关键帧（Keyframes）:使用<code>@keyframes</code>规则定义动画序列中的关键点，指定在动画过程中某个时刻应用的样式</li></ul><ul id="dff7918a-b315-48d0-8370-3a19bc7b8cce" class="bulleted-list"><li style="list-style-type:disc">动画属性（Animations Properties）：包括<code>animation-name</code>、<code>animation-duration</code>、<code>animation-timing-function</code>、<code>animation-delay</code>、<code>animation-iteration-count</code>、<code>animation-direction</code>、<code>animation-fill-mode</code>和<code>animation-play-state</code>等属性，用于配置动画的不同方面。</li></ul><h2 id="958a6386-9fc8-4f33-8ea2-0bae17ee64fe" class="">学习关键帧的使用</h2><p id="128e6198-1d0b-485b-a400-e844746264cd" class="">创建动画的第一步是定义关键帧，例如：</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a5b7cbe1-c28a-40d5-af5d-42a0bf6ad788" class="code"><code class="language-CSS">@keyframes example {
+from { background-color: red; }
+to { background-color: yellow; }
+}</code></pre><p id="43551015-4ed9-416e-aef4-355b8b937c15" class="">或者使用百分比定义多个关键点：</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2dda1c1e-c656-411e-b9c7-05fff7ce08a4" class="code"><code class="language-CSS">@keyframes example {
+  0% { background-color: red; }
+  50% { background-color: blue; }
+  100% { background-color: yellow; }
+}
+</code></pre><h2 id="3f677a93-17a1-46e9-ac78-0214eb8cab28" class="">应用动画属性</h2><p id="68a8c9b3-0d80-4996-861d-a4a300deb81c" class="">定义了关键帧后，需要将动画应用到元素上，并配置动画属性：</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1bfbb500-4cfc-4c03-b0d9-dc294b5f9415" class="code"><code class="language-CSS">div {
+  animation-name: example; /* 引用@keyframes定义的动画名称 */
+  animation-duration: 2s; /* 动画持续时间 */
+  animation-timing-function: ease-in-out; /* 动画速度曲线 */
+  animation-delay: 0s; /* 动画开始前的延迟 */
+  animation-iteration-count: infinite; /* 动画循环次数 */
+  animation-direction: alternate; /* 动画循环的方向 */
+  animation-fill-mode: forwards; /* 动画状态的保持 */
+  animation-play-state: running; /* 动画的播放状态 */
+}
+</code></pre><h3 id="b8aedfbb-2e3a-42ae-9716-2dc227498b64" class="">animation-timing-function</h3><h3 id="dd49fcad-27dc-4ae9-8041-7b8432fbb98b" class="">CSS animation-timing-function 属性值</h3><p id="36a9eb4b-b251-462e-ab42-21216749ac84" class=""><code>animation-timing-function</code>属性定义了动画的速度曲线，以下是一些常用的值：</p><ol type="1" id="70c881d2-7ae4-4fb0-9ce6-edbdcc86bf43" class="numbered-list" start="1"><li><strong>linear</strong>: 动画从头到尾的速度是相同的。</li></ol><ol type="1" id="f5ade7b9-a6c7-436f-b38a-e0ecedd47f4c" class="numbered-list" start="2"><li><strong>ease</strong>: 默认值，动画以低速开始，然后加快，在结束前变慢。</li></ol><ol type="1" id="763abc19-d2d6-43d0-8470-d57665e524b0" class="numbered-list" start="3"><li><strong>ease-in</strong>: 动画以低速开始。</li></ol><ol type="1" id="48f65cc7-9809-4460-959e-3eff77706ba1" class="numbered-list" start="4"><li><strong>ease-out</strong>: 动画以低速结束。</li></ol><ol type="1" id="60e72f38-1bea-4c05-839f-ac0ac4beb529" class="numbered-list" start="5"><li><strong>ease-in-out</strong>: 动画以低速开始和结束。</li></ol><ol type="1" id="5e40065c-26ad-4169-a0ee-a2762c38fe9e" class="numbered-list" start="6"><li><strong>step-start</strong>: 动画第一帧直接跳到结束状态，没有过渡效果。</li></ol><ol type="1" id="e1789c92-0004-40ba-8154-a27d0db64878" class="numbered-list" start="7"><li><strong>step-end</strong>: 动画一直保持开始状态，直到最后一帧突变到结束状态。</li></ol><p id="502296d6-9aa6-412f-924d-94a7c2302899" class="">除了这些预定义的速度曲线之外，还可以使用<code>cubic-bezier</code>函数来自定义速度曲线：</p><ul id="8d104dfa-e290-483b-80f0-cd123179cb35" class="bulleted-list"><li style="list-style-type:disc"><strong>cubic-bezier(n,n,n,n)</strong>: 在贝塞尔曲线上自定义动画的变化速率，其中的四个值分别代表曲线的控制点。</li></ul><p id="95e22d1e-30a5-4a3e-a877-286afafde82c" class="">还可以使用<code>steps()</code>函数指定步进间隔：</p><ul id="065cda70-a3f1-482c-8d6e-69d1e9f24dc3" class="bulleted-list"><li style="list-style-type:disc"><strong>steps(n, start|end)</strong>: 分割动画为n个步骤，通过第二个参数指定步骤开始的位置。</li></ul><p id="3e3cd24d-2d34-4411-aa8a-12775aa5105f" class="">通过选择或自定义合适的<code>animation-timing-function</code>，可以实现更加丰富和自然的动画效果。</p><h3 id="adbd6ec9-db22-4ffb-9ef2-8048e5c51610" class=""><strong>animation-iteration-count</strong></h3><p id="74087942-7073-4b6a-847e-c97d87f288b7" class=""><code>animation-iteration-count</code>属性定义了动画应该播放的次数。以下是可以设置的值：</p><ol type="1" id="f30715d2-15ab-43f5-94a7-3cd61507f0f7" class="numbered-list" start="1"><li><strong>number</strong>: 可以定义动画应该播放多少次。例如，<code>2</code>表示动画将播放两次。</li></ol><ol type="1" id="d51e1561-fc83-4649-9e74-e626633a178c" class="numbered-list" start="2"><li><strong>infinite</strong>: 动画将无限次播放。</li></ol><p id="fc06471e-5bed-4685-a6a9-33ec5711ff88" class="">使用<code>animation-iteration-count</code>属性，可以控制动画的重复次数，无论是播放固定次数还是无限循环。</p><h3 id="5c4109f9-844f-471b-9ae7-540431ad6958" class=""><strong>animation-direction</strong></h3><p id="f34d8b71-d8ed-4229-9dd6-012fa4a11698" class=""><code>animation-direction</code>属性定义了动画在每个周期内是否应该反向播放。以下是可以设置的值：</p><ol type="1" id="de8aa017-22bf-4712-8ea6-5ad7e555190b" class="numbered-list" start="1"><li><strong>normal</strong>: 动画每个周期内都正向播放。</li></ol><ol type="1" id="cb2045eb-5e83-4902-8486-9d2b03cd3305" class="numbered-list" start="2"><li><strong>reverse</strong>: 动画每个周期内都反向播放。</li></ol><ol type="1" id="829c47b0-9399-4a5e-b25e-abe589699e7e" class="numbered-list" start="3"><li><strong>alternate</strong>: 动画交替正向和反向播放，第一次正向，第二次反向，以此类推。</li></ol><ol type="1" id="c74eec2c-bbe2-453b-99fe-30ab81eee0c7" class="numbered-list" start="4"><li><strong>alternate-reverse</strong>: 动画交替反向和正向播放，第一次反向，第二次正向，以此类推。</li></ol><p id="9fddd978-7e04-49bd-87d6-c50ea599d209" class="">这些值允许动画在播放时改变方向，从而创建更复杂和有趣的视觉效果。</p><h3 id="b716b661-e537-4d85-a6a4-5b526123fc2a" class=""><strong>animation-fill-mode</strong></h3><p id="2b21d46b-c2a8-4dc2-86fd-7b759885823e" class=""><code>animation-fill-mode</code>属性指定一个动画在开始之前和结束之后如何将样式应用于其目标。以下是可以设置的值：</p><ol type="1" id="324f59c6-b9d3-40cb-aa84-62322a3ef2d5" class="numbered-list" start="1"><li><strong>none</strong>: 不改变默认行为。动画不会应用任何样式到目标元素，在动画未执行或已完成时。</li></ol><ol type="1" id="bf097004-9c2b-4f5f-afac-5ddb2a59a028" class="numbered-list" start="2"><li><strong>forwards</strong>: 目标将保留由执行期间遇到的最后一个关键帧计算值。</li></ol><ol type="1" id="83c47ee3-61d5-4555-92cd-bde0e72202f0" class="numbered-list" start="3"><li><strong>backwards</strong>: 在动画开始前，目标将应用第一个关键帧的样式，这种样式将在<code>animation-delay</code>期间持续。</li></ol><ol type="1" id="19d53b00-9750-4f3a-8336-2b7981bb583e" class="numbered-list" start="4"><li><strong>both</strong>: 动画将遵循<code>forwards</code>和<code>backwards</code>的规则，这意味着它将在两个方向上扩展动画的样式。</li></ol><p id="9e84a76d-cea6-4d0c-9b09-5056bfc80528" class="">通过设置<code>animation-fill-mode</code>属性，可以控制动画在执行之前和之后如何影响元素的样式。</p><h3 id="5a1b1fcd-5411-4ad0-b677-f8e510570fba" class=""><strong>animation-play-state</strong></h3><p id="eed3ee75-c7b6-46be-9e8e-25ef0d0f6129" class=""><code>animation-play-state</code>属性控制动画的播放状态。以下是可以设置的值：</p><ol type="1" id="a25cce05-7752-4cc3-bc44-47435a968530" class="numbered-list" start="1"><li><strong>running</strong>: 动画正在播放，这是默认值。</li></ol><ol type="1" id="5bbc3e82-8e47-4298-9c9a-5fe76c2a2f6b" class="numbered-list" start="2"><li><strong>paused</strong>: 动画被暂停。</li></ol><h3 id="f1c2a437-2a17-4fc7-b0b8-c348278d5f6a" class="">使用场景举例</h3><ol type="1" id="db0183b9-18c0-4e7c-8496-b787f20c5c50" class="numbered-list" start="1"><li><strong>用户交互</strong>: 当用户与网页上的某个元素交互时，可能需要暂停动画。例如，当用户将鼠标悬停在一个滚动的图片轮播上时，可以通过设置<code>animation-play-state: paused;</code>来暂停轮播，以便用户能够更好地查看当前图片。</li></ol><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9a4256ab-53a2-46be-bb6a-d83e89832f3c" class="code"><code class="language-CSS">.carousel:hover {
+  animation-play-state: paused;
+}
+</code></pre><p id="64635304-c8f8-44b7-bb28-947a4cdf9b11" class=""><br/>2. <br/><strong>控制播放</strong>: 在一个网页上播放一段动画效果，当用户点击播放或暂停按钮时，可以通过JavaScript来切换<code>animation-play-state</code>的值，从而控制动画的播放和暂停。</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e4bc58ef-3d96-4bf6-b319-b09941e7726c" class="code"><code class="language-JavaScript">// 假设有一个按钮用于控制动画
+document.querySelector(&#x27;#play-pause-button&#x27;).addEventListener(&#x27;click&#x27;, function() {
+  var animation = document.querySelector(&#x27;#animated-element&#x27;);
+  if (animation.style.animationPlayState === &#x27;paused&#x27;) {
+    animation.style.animationPlayState = &#x27;running&#x27;;
+  } else {
+    animation.style.animationPlayState = &#x27;paused&#x27;;
+  }
+});
+</code></pre><p id="b5d27c9b-f0b9-4833-8495-3c6d6e515f54" class="">在这两个场景中，通过更改<code>animation-play-state</code>属性，可以实现对动画播放的实时控制，提升用户的交互体验。</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
