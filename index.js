@@ -6,7 +6,7 @@ const { exec } = require('child_process');
 
 // 1. 为所有非index.html的html文件（从notion导出的文章文件）添加样式扩展，用来支持移动端的字体正常展示
 
-const MOBILE_FONT_SIZE_STYLE = `<style>html{font-size:120%;}code[class*=language-],pre[class*=language-] {font-size:2rem !important;}</style>`
+const MOBILE_FONT_SIZE_STYLE = `<style>html{font-size:120%;}code[class*=language-],pre[class*=language-] {font-size:2rem !important;}</style><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />`
 const titles = [];
 
 function handleAllHTMLMobileStyle() {
