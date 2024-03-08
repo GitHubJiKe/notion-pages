@@ -1,6 +1,6 @@
 #!/bin/bash
 # 指定需要解压的文件夹路径
-TARGET_FOLDER="$(pwd)/Codes/notion-pages/docs"
+TARGET_FOLDER="$(pwd)/docs"
 
 # 切换到目标文件夹
 cd "$TARGET_FOLDER"
