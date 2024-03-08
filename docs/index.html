@@ -1,48 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Notion Pages</title>
+        <style>
+            html {
+                font-size: 125%;
+                display: flex;
+                /* 开启Flexbox布局 */
+                justify-content: center;
+                /* 水平居中子元素 */
+                background-image: url(./paper_bg.jpeg);
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                color: #fff;
+                height: 100dvh;
+                width: 100dvw;
+            }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notion Pages</title>
-    <style>
-        html {
-            font-size: 125%;
-            display: flex;
-            /* 开启Flexbox布局 */
-            justify-content: center;
-            /* 水平居中子元素 */
-            background-image: url(./paper_bg.jpeg);
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            color: #fff;
-            height: 100dvh;
-            width: 100dvw;
-        }
+            #list {
+                padding-top: 24px;
+            }
 
-        #list {
-            padding-top: 24px;
-        }
+            a {
+                padding: 10px 24px;
+                color: #abb2bf;
+                display: block;
+            }
 
-        a {
-            padding: 10px 24px;
-            color: #abb2bf;
-        }
+            p {
+                padding-left: 24px;
+                font-size: smaller;
+                color: #e0e0e0;
+            }
+        </style>
+    </head>
 
-
-        p {
-            padding-left: 24px;
-            font-size: smaller;
-            color: #e0e0e0;
-        }
-    </style>
-</head>
-
-<body>
-    <h1>文章列表</h1>
-    <p>Peter Yuan</p>
-    <div id="list"><a href="https://githubjike.github.io/notion-pages/AnimationхЯ║чбА f7d9cd751ac640d382185f1e8cd1880b.html" target="_blank">Animation基础</a><a href="https://githubjike.github.io/notion-pages/Collections From Website 9eb5cbcc1878410e9f2d911c6033b936.html" target="_blank">Collections From Website</a></div>
-</body>
-
+    <body>
+        <h1>文章列表</h1>
+        <p>Peter Yuan</p>
+        <div id="list">
+            <a
+                href="https://githubjike.github.io/notion-pages/Collections From Website 9eb5cbcc1878410e9f2d911c6033b936.html"
+                target="_blank"
+                >Collections From Website</a
+            ><a
+                href="https://githubjike.github.io/notion-pages/AnimationхЯ║чбА f7d9cd751ac640d382185f1e8cd1880b.html"
+                target="_blank"
+                >Animation基础</a
+            >
+        </div>
+    </body>
 </html>
