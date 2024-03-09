@@ -1,17 +1,21 @@
 {
-  "name": "notion-pages",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
-  "scripts": {
-    "start": "node ./index.js"
-  },
-  "author": "peteryuan",
-  "license": "ISC",
-  "prettier": {
-    "tabWidth": 4
-  }
+    "name": "notion-pages",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "directories": {
+        "doc": "docs"
+    },
+    "scripts": {
+        "start": "node ./index.mjs"
+    },
+    "author": "peteryuan",
+    "license": "ISC",
+    "prettier": {
+        "tabWidth": 4
+    },
+    "devDependencies": {
+        "@types/node": "^20.11.25",
+        "cheerio": "1.0.0-rc.12"
+    }
 }
