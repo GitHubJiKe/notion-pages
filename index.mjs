@@ -3,6 +3,8 @@ import {
     readFile as _readFile,
     writeFile as _writeFile,
     rename as _rename,
+    stat as _stat,
+    unlink as _unlink
 } from "fs";
 import { extname, basename, join } from "path";
 import { load } from "cheerio";
@@ -14,6 +16,8 @@ const readdir = promisify(_readdir);
 const readFile = promisify(_readFile);
 const writeFile = promisify(_writeFile);
 const rename = promisify(_rename);
+const stat = promisify(_stat);
+const unlink = promisify(_unlink);
 
 const directoryPath = "./docs";
 const MOBILE_FONT_SIZE_STYLE = `
@@ -188,6 +192,28 @@ async function unzipFiles() {
     }
 }
 
+async function removeAllZipFiles() {
+    try {
+        // 读取目录中的文件和文件夹
+        const files = await readdir(directoryPath);
+
+        for (const file of files) {
+            const filePath = join(directoryPath, file);
+            const fileStat = await stat(filePath);
+
+            // 检查文件后缀并判断是否为文件
+            if (fileStat.isFile() && extname(file) === '.zip') {
+                // 删除文件
+                await unlink(filePath);
+                console.log(`Deleted: ${filePath}`);
+            }
+        }
+    } catch (error) {
+        console.error('Error while deleting .zip files:', error);
+    }
+}
+
 (async () => {
     await unzipFiles();
+    await removeAllZipFiles();
 })();
